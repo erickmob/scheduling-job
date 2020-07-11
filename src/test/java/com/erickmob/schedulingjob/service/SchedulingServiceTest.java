@@ -180,6 +180,47 @@ class SchedulingServiceTest {
 
     }
 
+    @Test
+    void givenTestCaseFromDocTest() throws TimeWindowException {
+        //given
+        jobsList = getJobsArrayMocked();
+
+        LocalDateTime sameTimeWindow = LocalDateTime.of(
+                2019,
+                Month.FEBRUARY,
+                10,
+                9,
+                0,
+                0);
+        //when
+        List<ArrayList> received = schedulingService.sortJobsForScheduling(jobsList, sameTimeWindow, null);
+
+        //then
+        assertEquals("[[1, 3], [2]]", received.toString());
+    }
+
+    @Test
+    void givenListWithNoValidJob() throws TimeWindowException {
+        //given
+        LocalDateTime jobDateTime = LocalDateTime.of(2019,
+                Month.NOVEMBER,
+                10,
+                12,
+                0,
+                0);
+
+        jobsList = new ArrayList<Job>(Arrays.asList(
+            new Job(4,"Importação de arquivos de fundos 2", jobDateTime, Duration.ofHours(27))
+        ));
+
+        //when
+        List<ArrayList> received = schedulingService.sortJobsForScheduling(jobsList, null, null);
+
+        //then
+        assertEquals("[]", received.toString());
+    }
+
+
     private List<Job> getJobsArrayMocked() {
         jobsList = new ArrayList<Job>(Arrays.asList(
                 getJob1Mocked(),

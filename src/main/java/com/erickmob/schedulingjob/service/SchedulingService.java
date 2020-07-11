@@ -43,7 +43,8 @@ public class SchedulingService {
         validateTimeWindow(inicioJanelaDeExecucao, fimJanelaDeExecucao);
 
         jobsList = sortListByDateAndFilter(jobsList, inicioJanelaDeExecucao, fimJanelaDeExecucao);
-        return null;
+
+        return createJobExecuteSequence(jobsList , inicioJanelaDeExecucao, fimJanelaDeExecucao);
     }
 
     LocalDateTime getValidDate(LocalDateTime receivedDate, LocalDateTime defaultDate) {
@@ -79,5 +80,34 @@ public class SchedulingService {
         return  duration.toHours() > 0;
     }
 
+    private List<ArrayList> createJobExecuteSequence(List<Job> jobsList, LocalDateTime inicioJanelaDeExecucao, LocalDateTime fimJanelaDeExecucao) {
+        ArrayList<ArrayList> expectedList = new ArrayList<>();
+        ArrayList<Long> longArray = new ArrayList<>();
+        long totalHoursForArray = 0;
 
+        for(Job job : jobsList){
+            if(jobFitsInsideArray(totalHoursForArray, job)){
+                longArray.add(job.getId());
+                totalHoursForArray += job.getTempoEstimado().toHours();
+            }else{
+                addArrayToExpectedList(expectedList, longArray);
+                longArray = new ArrayList<>();
+                longArray.add(job.getId());
+            }
+        }
+
+        addArrayToExpectedList(expectedList, longArray);
+
+        return expectedList;
+    }
+
+    private void addArrayToExpectedList(ArrayList<ArrayList> expectedList, ArrayList<Long> longArray) {
+        if (longArray.size() > 0) {
+            expectedList.add(longArray);
+        }
+    }
+
+    private boolean jobFitsInsideArray(long totalHoursForArray, Job job) {
+        return (totalHoursForArray + job.getTempoEstimado().toHours()) <= maxDurationHour.toHours();
+    }
 }
