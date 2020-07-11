@@ -1,14 +1,16 @@
 package com.erickmob.schedulingjob.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import java.time.Duration;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Data
+@AllArgsConstructor
 public class Job {
-    private long ID;
+    private long id;
     private String descricao;
-    private LocalDate dataMaximaDeDuracao;
+    private LocalDateTime dataMaximaDeDuracao;
     private Duration tempoEstimado;
 }
