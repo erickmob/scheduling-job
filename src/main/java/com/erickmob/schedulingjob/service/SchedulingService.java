@@ -1,5 +1,6 @@
 package com.erickmob.schedulingjob.service;
 
+import com.erickmob.schedulingjob.exceptions.TimeWindowException;
 import com.erickmob.schedulingjob.model.Job;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -32,15 +33,28 @@ public class SchedulingService {
             0,
             0);
 
-    public List<ArrayList> sortJobsForScheduling(List<Job> jobsList, LocalDateTime inicioJanelaDeExecucao, LocalDateTime fimJanelaDeExecucao) {
+    public List<ArrayList> sortJobsForScheduling(List<Job> jobsList, LocalDateTime inicioJanelaDeExecucao, LocalDateTime fimJanelaDeExecucao) throws TimeWindowException {
 
         inicioJanelaDeExecucao = getValidDate(inicioJanelaDeExecucao, executionTimeWindowStart);
         fimJanelaDeExecucao = getValidDate(fimJanelaDeExecucao, executionTimeWindowEnd);
+
+        validateTimeWindow(inicioJanelaDeExecucao, fimJanelaDeExecucao);
         return null;
     }
 
     LocalDateTime getValidDate(LocalDateTime receivedDate, LocalDateTime defaultDate) {
         return receivedDate == null ? defaultDate : receivedDate;
+    }
+
+    void validateTimeWindow(LocalDateTime inicioJanelaDeExecucao, LocalDateTime fimJanelaDeExecucao) throws TimeWindowException {
+
+        if(inicioJanelaDeExecucao.isAfter(fimJanelaDeExecucao)){
+            throw new TimeWindowException("Invalid Window Time");
+        }
+
+        if(inicioJanelaDeExecucao.isEqual(fimJanelaDeExecucao)){
+            throw new TimeWindowException("Time Window too short");
+        }
     }
 
 }
