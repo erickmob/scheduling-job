@@ -134,6 +134,52 @@ class SchedulingServiceTest {
         }
     }
 
+
+    @Test
+    void whenJobListSameDateThenSort() throws Exception {
+        //given
+        jobsList = getJobsArrayMocked();
+        LocalDateTime jobDateTime = LocalDateTime.of(2019,
+                Month.NOVEMBER,
+                10,
+                12,
+                0,
+                0);
+        jobsList.add(new Job(4,"Importação de arquivos de fundos 2", jobDateTime, Duration.ofHours(1)));
+        jobsList.add(new Job(5,"Importação de arquivos de fundos 3", jobDateTime, Duration.ofHours(1)));
+
+        //when
+        List<Job> result = schedulingService.sortListByDateAndFilter(jobsList, executionTimeWindowStart, executionTimeWindowEnd);
+        assertEquals(1,result.get(0).getId());
+        assertEquals(3,result.get(1).getId());
+        assertEquals(4,result.get(2).getId());
+        assertEquals(5,result.get(3).getId());
+        assertEquals(2,result.get(4).getId());
+    }
+
+    @Test
+    void whenJobListWithConclusionOutSideTimeWindowThenFilter() throws Exception {
+        //given
+        jobsList = getJobsArrayMocked();
+        LocalDateTime jobDateTime = LocalDateTime.of(2019,
+                Month.NOVEMBER,
+                10,
+                12,
+                0,
+                0);
+        jobsList.add(new Job(4,"Importação de arquivos de fundos 2", jobDateTime, Duration.ofHours(27)));
+        jobsList.add(new Job(5,"Importação de arquivos de fundos 3", jobDateTime, Duration.ofHours(26)));
+
+        //when
+        List<Job> result = schedulingService.sortListByDateAndFilter(jobsList, executionTimeWindowStart, executionTimeWindowEnd);
+
+        //then
+        assertEquals(1,result.get(0).getId());
+        assertEquals(3,result.get(1).getId());
+        assertEquals(2,result.get(2).getId());
+
+    }
+
     private List<Job> getJobsArrayMocked() {
         jobsList = new ArrayList<Job>(Arrays.asList(
                 getJob1Mocked(),
