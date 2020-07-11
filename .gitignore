@@ -35,3 +35,6 @@ build/
 
 #IDE metadata
 **.idea/**
+
+#DS_Store metadata
+**.DS_Store**

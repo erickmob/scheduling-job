@@ -1,0 +1,14 @@
+version: '2.2'
+services:
+  web:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    image: web
+    ports:
+      - 8080:8080
+    networks:
+      - app
+
+networks:
+  app:
