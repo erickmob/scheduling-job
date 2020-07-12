@@ -4,7 +4,13 @@
 [![codecov](https://codecov.io/gh/erickmob/scheduling-job/branch/master/graph/badge.svg?token=LYBQWF2RY9)](https://codecov.io/gh/erickmob/scheduling-job)
 [![Maintainability](https://api.codeclimate.com/v1/badges/9365343e9e48d6d3a2f0/maintainability)](https://codeclimate.com/github/erickmob/scheduling-job/maintainability)
 
-A simple spring project that shows the job's execution order; 
+A simple spring project that shows the job's execution order.
+
+### Temporaly deployed on Heroku
+
+[Heroku's Application Page](https://scheduling-job-777.herokuapp.com/swagger-ui.html)
+
+###### *may take a little longer one first request because heroku put it to sleep sometimes. 
 
 ### The problem
 
@@ -112,7 +118,8 @@ docker-compose up web
 
 API documentation on:
 
-[Swagger](http://localhost:8080/swagger-ui.html)
+[Swagger on localhost](http://localhost:8080/swagger-ui.html)
+[Swagger on Heroku](https://scheduling-job-777.herokuapp.com/swagger-ui.html)
 
 ### Tests
 
@@ -134,8 +141,9 @@ mvn test
 
 #### Swagger
 
- - Go to Swagger UI page ("http://localhost:8080/swagger-ui.html#/SequenceJob")
- - Click on "/sequenceJobs" and then 'Try it out' button.
+ - Go to [Swagger on localhost](http://localhost:8080/swagger-ui.html) or
+         [Swagger on Heroku](https://scheduling-job-777.herokuapp.com/swagger-ui.html)
+ - Click on "SequenceJob", "/sequenceJobs" and then 'Try it out' button.
  - Replace the body with the following:
  
 ```zsh
@@ -186,8 +194,14 @@ You should see bellow on "Responses" section, the response body like this:
 
 Simply run on cli:
 
+LocalHost:
 ```zsh
 curl -X POST "http://localhost:8080/sequenceJobs" -H "accept: */*" -H "Content-Type: application/json" -d "{ \"fimJanelaDeExecucao\": \"2019-11-11T12:00:00.483Z\", \"inicioJanelaDeExecucao\": \"2019-11-10T09:00:00.483Z\", \"jobList\": [ { \"dataMaximaDeDuracao\": \"2019-11-10T12:00:00.483Z\", \"descricao\": \"Importação de arquivos de fundos\", \"id\": 1, \"tempoEstimado\": 2 }, { \"dataMaximaDeDuracao\": \"2019-11-11T12:00:00.483Z\", \"descricao\": \"Importação de dados da Base Legada\", \"id\": 2, \"tempoEstimado\": 4 }, { \"dataMaximaDeDuracao\": \"2019-11-11T08:00:00.483Z\", \"descricao\": \"Importação de dados de integração\", \"id\": 3, \"tempoEstimado\": 6 } ]}"
+```
+
+Or Heroku:
+```zsh
+curl -X POST "https://scheduling-job-777.herokuapp.com/sequenceJobs" -H "accept: */*" -H "Content-Type: application/json" -d "{ \"fimJanelaDeExecucao\": \"2019-11-11T12:00:00.483Z\", \"inicioJanelaDeExecucao\": \"2019-11-10T09:00:00.483Z\", \"jobList\": [ { \"dataMaximaDeDuracao\": \"2019-11-10T12:00:00.483Z\", \"descricao\": \"Importação de arquivos de fundos\", \"id\": 1, \"tempoEstimado\": 2 }, { \"dataMaximaDeDuracao\": \"2019-11-11T12:00:00.483Z\", \"descricao\": \"Importação de dados da Base Legada\", \"id\": 2, \"tempoEstimado\": 4 }, { \"dataMaximaDeDuracao\": \"2019-11-11T08:00:00.483Z\", \"descricao\": \"Importação de dados de integração\", \"id\": 3, \"tempoEstimado\": 6 } ]}"
 ```
 
 And see the output response:
