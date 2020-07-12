@@ -70,6 +70,7 @@ Output esperado
 - [Spring boot](https://spring.io/projects/spring-boot)
 - [Docker](https://www.docker.com)
 - [Lombok](https://projectlombok.org)
+- [Swagger 2](https://swagger.io) for API documentation
 - [jUnit 5](https://junit.org/junit5/) for unit tests
 - [JaCoCo](https://www.eclemma.org/jacoco/) for tests reports
 - [Travis](http://travis-ci.com) for CI and build status
@@ -82,8 +83,9 @@ Output esperado
     - Maven 3.6.1
     - Docker (Optional)
 
-### Clone this repo
-Clone the repository
+### Build and Run
+
+#### Clone this repo
 ```zsh
 git clone https://github.com/erickmob/scheduling-job.git
 ```
@@ -93,29 +95,115 @@ Enter on the root folder
 cd scheduling-job/
 ```
 
-### With Maven
+#### With Maven
 To run the application with maven:
 ```zsh
 mvn spring-boot:run
 ```
 
+#### Or With Docker
+To run the application with docker:
+```zsh
+docker-compose build
+docker-compose up web
+```
+
+### Swagger API UI
+
+API documentation on:
+
+[Swagger](http://localhost:8080/swagger-ui.html)
+
+### Tests
+
+
+#### JaCoCo Coverage
+
+You can see the covegare test on:
+```
+target/site/jacoco/index.html
+```
+
+You can run basic test in three ways:
+
+#### Maven
 To run all tests:
 ```zsh
 mvn test
 ```
 
-### With Docker
-To run the application with docker:
+#### Swagger
+
+ - Go to Swagger UI page ("http://localhost:8080/swagger-ui.html#/SequenceJob")
+ - Click on "/sequenceJobs" and then 'Try it out' button.
+ - Replace the body with the following:
+ 
 ```zsh
-docker-compose up web
+{
+  "fimJanelaDeExecucao": "2019-11-11T12:00:00.483Z",
+  "inicioJanelaDeExecucao": "2019-11-10T09:00:00.483Z",
+  "jobList": [
+    {
+      "dataMaximaDeDuracao": "2019-11-10T12:00:00.483Z",
+      "descricao": "Importação de arquivos de fundos",
+      "id": 1,
+      "tempoEstimado": 2
+    },
+    {
+      "dataMaximaDeDuracao": "2019-11-11T12:00:00.483Z",
+      "descricao": "Importação de dados da Base Legada",
+      "id": 2,
+      "tempoEstimado": 4
+    },
+    {
+      "dataMaximaDeDuracao": "2019-11-11T08:00:00.483Z",
+      "descricao": "Importação de dados de integração",
+      "id": 3,
+      "tempoEstimado": 6
+    }
+  ]
+}
 ```
 
-###JaCoCo Coverage
+- Click on "Execute" button
 
-You can also see the covegare test on:
+You should see bellow on "Responses" section, the response body like this:
+
+```zsh
+[
+  [
+    1,
+    3
+  ],
+  [
+    2
+  ]
+]
 ```
-target/site/jacoco/index.html
+
+
+#### Curl
+
+Simply run on cli:
+
+```zsh
+curl -X POST "http://localhost:8080/sequenceJobs" -H "accept: */*" -H "Content-Type: application/json" -d "{ \"fimJanelaDeExecucao\": \"2019-11-11T12:00:00.483Z\", \"inicioJanelaDeExecucao\": \"2019-11-10T09:00:00.483Z\", \"jobList\": [ { \"dataMaximaDeDuracao\": \"2019-11-10T12:00:00.483Z\", \"descricao\": \"Importação de arquivos de fundos\", \"id\": 1, \"tempoEstimado\": 2 }, { \"dataMaximaDeDuracao\": \"2019-11-11T12:00:00.483Z\", \"descricao\": \"Importação de dados da Base Legada\", \"id\": 2, \"tempoEstimado\": 4 }, { \"dataMaximaDeDuracao\": \"2019-11-11T08:00:00.483Z\", \"descricao\": \"Importação de dados de integração\", \"id\": 3, \"tempoEstimado\": 6 } ]}"
 ```
+
+And see the output response:
+
+```zsh
+[
+  [
+    1,
+    3
+  ],
+  [
+    2
+  ]
+]
+```
+
 
 ### Author
 Erick de Miranda Oliveira (@erickmob)
