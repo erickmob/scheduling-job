@@ -11,6 +11,6 @@ import java.time.LocalDateTime;
 public class Job {
     private long id;
     private String descricao;
-    private LocalDateTime dataMaximaDeDuracao;
+    private LocalDateTime dataMaximaDeConclusao;
     private Duration tempoEstimado;
 }

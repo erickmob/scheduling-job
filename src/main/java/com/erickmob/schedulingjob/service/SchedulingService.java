@@ -67,47 +67,70 @@ public class SchedulingService {
         return  jobsList.stream()
                 .filter(job -> job.getTempoEstimado().toHours() < maxDurationHour.toHours())
                 .filter(job -> conlusionInsideTimeWindow(job, inicioJanelaDeExecucao, fimJanelaDeExecucao))
+                .filter(job -> maxEstimatedDateInsideTimeWindow(job, inicioJanelaDeExecucao))
                 .sorted(
-                        Comparator.comparing(Job::getDataMaximaDeDuracao)
+                        Comparator.comparing(Job::getDataMaximaDeConclusao)
                 )
                 .collect(Collectors.toList());
 
     }
 
     boolean conlusionInsideTimeWindow(Job job, LocalDateTime inicioJanelaDeExecucao, LocalDateTime fimJanelaDeExecucao) {
-        LocalDateTime estimateConcludion = executionTimeWindowStart.plusHours(job.getTempoEstimado().toHours());
-        Duration duration = Duration.between(estimateConcludion, executionTimeWindowEnd);
+        LocalDateTime estimateConcludion = inicioJanelaDeExecucao.plusHours(job.getTempoEstimado().toHours());
+        Duration duration = Duration.between(estimateConcludion, fimJanelaDeExecucao);
         return  duration.toHours() > 0;
     }
 
-    private List<ArrayList> createJobExecuteSequence(List<Job> jobsList, LocalDateTime inicioJanelaDeExecucao, LocalDateTime fimJanelaDeExecucao) {
-        ArrayList<ArrayList> expectedList = new ArrayList<>();
-        ArrayList<Long> longArray = new ArrayList<>();
-        long totalHoursForArray = 0;
-
-        for(Job job : jobsList){
-            if(jobFitsInsideArray(totalHoursForArray, job)){
-                longArray.add(job.getId());
-                totalHoursForArray += job.getTempoEstimado().toHours();
-            }else{
-                addArrayToExpectedList(expectedList, longArray);
-                longArray = new ArrayList<>();
-                longArray.add(job.getId());
-            }
-        }
-
-        addArrayToExpectedList(expectedList, longArray);
-
-        return expectedList;
+    boolean maxEstimatedDateInsideTimeWindow(Job job, LocalDateTime inicioJanelaDeExecucao) {
+        return  job.getDataMaximaDeConclusao().isAfter(inicioJanelaDeExecucao);
     }
 
-    private void addArrayToExpectedList(ArrayList<ArrayList> expectedList, ArrayList<Long> longArray) {
+    private List<ArrayList> createJobExecuteSequence(List<Job> jobsList, LocalDateTime inicioJanelaDeExecucao, LocalDateTime fimJanelaDeExecucao) {
+
+        ArrayList<ArrayList> resultList = new ArrayList<>();
+        ArrayList<Long> eightHoursArray = new ArrayList<>();
+
+        long countTotalHoursForArray = 0;
+
+        LocalDateTime currentDateTime = inicioJanelaDeExecucao;
+        LocalDateTime estimateJobConclusionDate;
+
+        for(Job job : jobsList){
+
+            estimateJobConclusionDate = currentDateTime.plusHours(job.getTempoEstimado().toHours());
+
+            if(estimateJobConclusionDate.isAfter(fimJanelaDeExecucao)){
+                break;
+            }
+            if(estimateJobConclusionDate.isAfter(job.getDataMaximaDeConclusao())){
+                break;
+            }
+
+            if(jobFitsInsideEightHoursArray(countTotalHoursForArray, job)){
+                eightHoursArray.add(job.getId());
+                countTotalHoursForArray += job.getTempoEstimado().toHours();
+            }else{
+                addEightHourArrayToResultList(resultList, eightHoursArray);
+                eightHoursArray = new ArrayList<>();
+                eightHoursArray.add(job.getId());
+                countTotalHoursForArray = job.getTempoEstimado().toHours();
+            }
+            currentDateTime = currentDateTime.plusHours(job.getTempoEstimado().toHours());
+
+        }
+
+        addEightHourArrayToResultList(resultList, eightHoursArray);
+
+        return resultList;
+    }
+
+    private void addEightHourArrayToResultList(ArrayList<ArrayList> expectedList, ArrayList<Long> longArray) {
         if (longArray.size() > 0) {
             expectedList.add(longArray);
         }
     }
 
-    private boolean jobFitsInsideArray(long totalHoursForArray, Job job) {
+    private boolean jobFitsInsideEightHoursArray(long totalHoursForArray, Job job) {
         return (totalHoursForArray + job.getTempoEstimado().toHours()) <= maxDurationHour.toHours();
     }
 }

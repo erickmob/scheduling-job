@@ -151,9 +151,9 @@ class SchedulingServiceTest {
         //when
         List<Job> result = schedulingService.sortListByDateAndFilter(jobsList, executionTimeWindowStart, executionTimeWindowEnd);
         assertEquals(1,result.get(0).getId());
-        assertEquals(3,result.get(1).getId());
-        assertEquals(4,result.get(2).getId());
-        assertEquals(5,result.get(3).getId());
+        assertEquals(4,result.get(1).getId());
+        assertEquals(5,result.get(2).getId());
+        assertEquals(3,result.get(3).getId());
         assertEquals(2,result.get(4).getId());
     }
 
@@ -200,26 +200,114 @@ class SchedulingServiceTest {
     }
 
     @Test
-    void givenListWithNoValidJob() throws TimeWindowException {
+    void givenTestCaseFromDocTestOnShortWindown() throws TimeWindowException {
         //given
+        jobsList = getJobsArrayMocked();
         LocalDateTime jobDateTime = LocalDateTime.of(2019,
                 Month.NOVEMBER,
                 10,
-                12,
+                20,
                 0,
                 0);
 
-        jobsList = new ArrayList<Job>(Arrays.asList(
-            new Job(4,"Importação de arquivos de fundos 2", jobDateTime, Duration.ofHours(27))
-        ));
+        //when
+        List<ArrayList> received = schedulingService.sortJobsForScheduling(jobsList, null, jobDateTime);
+
+        //then
+        assertEquals("[[1, 3]]", received.toString());
+    }
+
+
+    @Test
+    void givenJobWithEstimatedBeforeStartWindowTime() throws TimeWindowException {
+        //given
+        jobsList = getJobsArrayMocked();
+
+        LocalDateTime jobDateTime = LocalDateTime.of(2019,
+                Month.JANUARY,
+                11,
+                8,
+                0,
+                0);
+
+        jobsList.add(
+                new Job(
+                    4,
+                        "job com data max conclusao antes do inicio da janela",
+                        jobDateTime,
+                        Duration.ofHours(6)
+                )
+        );
 
         //when
         List<ArrayList> received = schedulingService.sortJobsForScheduling(jobsList, null, null);
 
         //then
-        assertEquals("[]", received.toString());
+        assertEquals("[[1, 3], [2]]", received.toString());
     }
 
+    @Test
+    void givenMultipleJobsWithSameMaxEstimated() throws TimeWindowException {
+        //given
+        LocalDateTime dataMaximaDeConclusao = LocalDateTime.of(
+                2019,
+                Month.NOVEMBER,
+                10,
+                19,
+                0,
+                0);
+        jobsList = new ArrayList<>();
+        jobsList.add(
+                new Job(
+                        1,
+                        "asd",
+                        dataMaximaDeConclusao,
+                        Duration.ofHours(6)
+                )
+        );
+        jobsList.add(
+                new Job(
+                        2,
+                        "asd",
+                        dataMaximaDeConclusao,
+                        Duration.ofHours(6)
+                )
+        );
+
+        jobsList.add(
+                new Job(
+                        3,
+                        "asd",
+                        dataMaximaDeConclusao,
+                        Duration.ofHours(6)
+                )
+        );
+
+        jobsList.add(
+                new Job(
+                        4,
+                        "asd",
+                        dataMaximaDeConclusao,
+                        Duration.ofHours(6)
+                )
+        );
+
+        jobsList.add(
+                new Job(
+                        5,
+                        "asd",
+                        dataMaximaDeConclusao,
+                        Duration.ofHours(6)
+                )
+        );
+
+
+        //when
+        List<ArrayList> received = schedulingService.sortJobsForScheduling(jobsList, null, null);
+
+        //then
+        assertEquals("[[1]]", received.toString());
+    }
 
     private List<Job> getJobsArrayMocked() {
         jobsList = new ArrayList<Job>(Arrays.asList(
@@ -254,8 +342,8 @@ class SchedulingServiceTest {
     private Job getJob3Mocked() {
         LocalDateTime jobDateTime = LocalDateTime.of(2019,
                 Month.NOVEMBER,
-                10,
-                12,
+                11,
+                8,
                 0,
                 0);
         return new Job(3,"Importação de dados de integração", jobDateTime, Duration.ofHours(6));

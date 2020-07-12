@@ -19,7 +19,7 @@ public class JobService {
                         new Job(
                                 jobDTO.getId(),
                                 jobDTO.getDescricao(),
-                                jobDTO.getDataMaximaDeDuracao(),
+                                jobDTO.getDataMaximaDeConclusao(),
                                 Duration.ofHours(jobDTO.getTempoEstimado())
                         )
                 )

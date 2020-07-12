@@ -152,19 +152,19 @@ mvn test
   "inicioJanelaDeExecucao": "2019-11-10T09:00:00.483Z",
   "jobList": [
     {
-      "dataMaximaDeDuracao": "2019-11-10T12:00:00.483Z",
+      "dataMaximaDeConclusao": "2019-11-10T12:00:00.483Z",
       "descricao": "Importação de arquivos de fundos",
       "id": 1,
       "tempoEstimado": 2
     },
     {
-      "dataMaximaDeDuracao": "2019-11-11T12:00:00.483Z",
+      "dataMaximaDeConclusao": "2019-11-11T12:00:00.483Z",
       "descricao": "Importação de dados da Base Legada",
       "id": 2,
       "tempoEstimado": 4
     },
     {
-      "dataMaximaDeDuracao": "2019-11-11T08:00:00.483Z",
+      "dataMaximaDeConclusao": "2019-11-11T08:00:00.483Z",
       "descricao": "Importação de dados de integração",
       "id": 3,
       "tempoEstimado": 6
@@ -196,12 +196,12 @@ Simply run on cli:
 
 LocalHost:
 ```zsh
-curl -X POST "http://localhost:8080/sequenceJobs" -H "accept: */*" -H "Content-Type: application/json" -d "{ \"fimJanelaDeExecucao\": \"2019-11-11T12:00:00.483Z\", \"inicioJanelaDeExecucao\": \"2019-11-10T09:00:00.483Z\", \"jobList\": [ { \"dataMaximaDeDuracao\": \"2019-11-10T12:00:00.483Z\", \"descricao\": \"Importação de arquivos de fundos\", \"id\": 1, \"tempoEstimado\": 2 }, { \"dataMaximaDeDuracao\": \"2019-11-11T12:00:00.483Z\", \"descricao\": \"Importação de dados da Base Legada\", \"id\": 2, \"tempoEstimado\": 4 }, { \"dataMaximaDeDuracao\": \"2019-11-11T08:00:00.483Z\", \"descricao\": \"Importação de dados de integração\", \"id\": 3, \"tempoEstimado\": 6 } ]}"
+curl -X POST "http://localhost:8080/sequenceJobs" -H "accept: */*" -H "Content-Type: application/json" -d "{ \"fimJanelaDeExecucao\": \"2019-11-11T12:00:00.483Z\", \"inicioJanelaDeExecucao\": \"2019-11-10T09:00:00.483Z\", \"jobList\": [ { \"dataMaximaDeConclusao\": \"2019-11-10T12:00:00.483Z\", \"descricao\": \"Importação de arquivos de fundos\", \"id\": 1, \"tempoEstimado\": 2 }, { \"dataMaximaDeConclusao\": \"2019-11-11T12:00:00.483Z\", \"descricao\": \"Importação de dados da Base Legada\", \"id\": 2, \"tempoEstimado\": 4 }, { \"dataMaximaDeConclusao\": \"2019-11-11T08:00:00.483Z\", \"descricao\": \"Importação de dados de integração\", \"id\": 3, \"tempoEstimado\": 6 } ]}"
 ```
 
 Or Heroku:
 ```zsh
-curl -X POST "https://scheduling-job-777.herokuapp.com/sequenceJobs" -H "accept: */*" -H "Content-Type: application/json" -d "{ \"fimJanelaDeExecucao\": \"2019-11-11T12:00:00.483Z\", \"inicioJanelaDeExecucao\": \"2019-11-10T09:00:00.483Z\", \"jobList\": [ { \"dataMaximaDeDuracao\": \"2019-11-10T12:00:00.483Z\", \"descricao\": \"Importação de arquivos de fundos\", \"id\": 1, \"tempoEstimado\": 2 }, { \"dataMaximaDeDuracao\": \"2019-11-11T12:00:00.483Z\", \"descricao\": \"Importação de dados da Base Legada\", \"id\": 2, \"tempoEstimado\": 4 }, { \"dataMaximaDeDuracao\": \"2019-11-11T08:00:00.483Z\", \"descricao\": \"Importação de dados de integração\", \"id\": 3, \"tempoEstimado\": 6 } ]}"
+curl -X POST "https://scheduling-job-777.herokuapp.com/sequenceJobs" -H "accept: */*" -H "Content-Type: application/json" -d "{ \"fimJanelaDeExecucao\": \"2019-11-11T12:00:00.483Z\", \"inicioJanelaDeExecucao\": \"2019-11-10T09:00:00.483Z\", \"jobList\": [ { \"dataMaximaDeConclusao\": \"2019-11-10T12:00:00.483Z\", \"descricao\": \"Importação de arquivos de fundos\", \"id\": 1, \"tempoEstimado\": 2 }, { \"dataMaximaDeConclusao\": \"2019-11-11T12:00:00.483Z\", \"descricao\": \"Importação de dados da Base Legada\", \"id\": 2, \"tempoEstimado\": 4 }, { \"dataMaximaDeConclusao\": \"2019-11-11T08:00:00.483Z\", \"descricao\": \"Importação de dados de integração\", \"id\": 3, \"tempoEstimado\": 6 } ]}"
 ```
 
 And see the output response:

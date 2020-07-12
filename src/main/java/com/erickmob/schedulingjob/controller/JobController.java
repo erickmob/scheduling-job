@@ -33,8 +33,11 @@ public class JobController {
     public List<ArrayList> sequenceJobs(@RequestBody JobsDTO jobsDTO) {
         log.info("Received request with body:"+jobsDTO.toString());
         List<ArrayList> result;
+        List<Job> jobsList = new ArrayList<>();
         try{
-            List<Job> jobsList = jobService.createFromJobListDto(jobsDTO.getJobList());
+            if(!jobsDTO.getJobList().isEmpty()){
+                jobsList = jobService.createFromJobListDto(jobsDTO.getJobList());
+            }
             result = schedulingService.sortJobsForScheduling(jobsList, jobsDTO.getInicioJanelaDeExecucao(), jobsDTO.getFimJanelaDeExecucao());
             return result;
         }catch (TimeWindowException e){
