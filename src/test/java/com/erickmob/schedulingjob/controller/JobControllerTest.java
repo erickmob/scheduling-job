@@ -57,4 +57,17 @@ public class JobControllerTest {
                 .andExpect(status().isBadRequest());
 
     }
+
+    @Test
+    void sendEmptyDataExpectErrorStatus() throws Exception {
+
+        JobsDTO jobsDTO = new JobsDTO();
+        ResultActions resultActions = mockMvc
+                .perform(
+                        post("/sequenceJobs")
+                                .contentType(TestUtil.APPLICATION_JSON_UTF8)
+                                .content(TestUtil.convertObjectToJsonBytes(jobsDTO)))
+                .andExpect(status().isNotAcceptable());
+
+    }
 }
