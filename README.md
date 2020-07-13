@@ -10,7 +10,7 @@ A simple spring project that shows the job's execution order.
 
 [Heroku's Application Page](https://scheduling-job-777.herokuapp.com/swagger-ui.html)
 
-###### *may take a little longer one first request because heroku put it to sleep sometimes. 
+###### *may take a little longer one first request because heroku put it to sleep sometimes.
 
 ### The problem
 
@@ -72,9 +72,11 @@ Output esperado
 ### Build With
 
 - [OpenJDK 11](https://www.oracle.com/java/technologies/javase-jdk11-downloads.html)
-- [Spring 2.3.1.RELEASE](https://spring.io) 
+- [Spring 2.3.1.RELEASE](https://spring.io)
 - [Spring boot](https://spring.io/projects/spring-boot)
 - [Docker](https://www.docker.com)
+- [docker-compose](https://docs.docker.com/compose/)
+- [make](https://www.gnu.org/software/make/manual/make.html)
 - [Lombok](https://projectlombok.org)
 - [Swagger 2](https://swagger.io) for API documentation
 - [jUnit 5](https://junit.org/junit5/) for unit tests
@@ -82,14 +84,15 @@ Output esperado
 - [Travis](http://travis-ci.com) for CI and build status
 - [codecov.io](https://codecov.io) for Code coverage
 - [codeclimate](https://codeclimate.com)for code maintainability
-    
+
 ### Prerequisites to run it
 
     - OpenJDK 11
     - Maven 3.6.1
-    - Docker (Optional)
+    - Docker 19.03+ (Optional)
+    - docker-compose 1.26.2+ (Optional)
 
-### Build and Run
+### Setup, Build and Run
 
 #### Clone this repo
 ```zsh
@@ -104,14 +107,14 @@ cd scheduling-job/
 #### With Maven
 To run the application with maven:
 ```zsh
-mvn spring-boot:run
+make run-maven
 ```
 
 #### Or With Docker
 To run the application with docker:
 ```zsh
-docker-compose build
-docker-compose up web
+make build-image
+make run-app
 ```
 
 ### Swagger API UI
@@ -145,7 +148,7 @@ mvn test
          [Swagger on Heroku](https://scheduling-job-777.herokuapp.com/swagger-ui.html)
  - Click on "SequenceJob", "/sequenceJobs" and then 'Try it out' button.
  - Replace the body with the following:
- 
+
 ```zsh
 {
   "fimJanelaDeExecucao": "2019-11-11T12:00:00.483Z",
@@ -222,6 +225,6 @@ And see the output response:
 ### Author
 Erick de Miranda Oliveira (@erickmob)
 
-- [Github](https://github.com/erickmob/) 
-- [LinkedIn](https://www.linkedin.com/in/erickmob/) 
+- [Github](https://github.com/erickmob/)
+- [LinkedIn](https://www.linkedin.com/in/erickmob/)
 - [Gmail](mailto:erickmob@gmail.com)
